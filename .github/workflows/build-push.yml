@@ -1,0 +1,15 @@
+name: Build and push
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/docker.yml
+    secrets: inherit
