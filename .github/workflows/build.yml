@@ -12,9 +12,43 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - version: trixie
+            latest: false
+            alt: testing
+          - version: bookworm
+            latest: true
+            alt: stable
+          - version: bullseye
+            latest: false
+            alt: oldstable
     steps:
       - name: Checkout sources
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
+      - name: Run docker build (latest)
+        if: ${{ matrix.latest }}
+        run:
+          docker buildx build . \
+            --push \
+            --platform linux/amd64,linux/arm64 \
+            --no-cache \
+            --pull \
+            --build-arg "DEBIAN_VERSION=${{matrix.version}}" \
+            -t "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
+            -t "ghcr.io/tweedegolf/debian:${{matrix.alt}}" \
+            -t "ghcr.io/tweedegolf/debian:latest"
+
       - name: Run docker build
-        run: docker buildx build . -t ghcr.io/tweedegolf/debian:latest
+        if: ${{ !matrix.latest }}
+        run:
+          docker buildx build . \
+            --push \
+            --platform linux/amd64,linux/arm64 \
+            --no-cache \
+            --pull \
+            --build-arg "DEBIAN_VERSION=${{matrix.version}}" \
+            -t "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
+            -t "ghcr.io/tweedegolf/debian:${{matrix.alt}}"
