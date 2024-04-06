@@ -28,29 +28,30 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Run docker build (latest)
-        if: ${{ matrix.latest }}
-        run: |
-          docker buildx create --use
-          docker buildx build . \
-            --push \
-            --platform linux/amd64,linux/arm64 \
-            --no-cache \
-            --pull \
-            --build-arg "DEBIAN_VERSION=${{matrix.version}}" \
-            --tag "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
-            --tag "ghcr.io/tweedegolf/debian:${{matrix.alt}}" \
-            --tag "ghcr.io/tweedegolf/debian:latest"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
 
-      - name: Run docker build
-        if: ${{ !matrix.latest }}
-        run: |
-          docker buildx create --use
-          docker buildx build . \
-            --push \
-            --platform linux/amd64,linux/arm64 \
-            --no-cache \
-            --pull \
-            --build-arg "DEBIAN_VERSION=${{matrix.version}}" \
-            --tag "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
-            --tag "ghcr.io/tweedegolf/debian:${{matrix.alt}}"
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@2b51285047da1547ffb1b2203d8be4c0af6b1f20 # v3.2.0
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@e92390c5fb421da1463c202d546fed0ec5c39f20 # v3.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          no-cache: true
+          pull: true
+          build-args: |
+            DEBIAN_VERSION=${{matrix.version}}
+          push: ${{ github.ref_name == 'refs/heads/main' }}
+          tags: |
+            ghcr.io/tweedegolf/debian:${{matrix.version}}
+            ghcr.io/tweedegolf/debian:${{matrix.alt}}
+            ${{ matrix.latest && 'ghcr.io/tweedegolf/debian:latest' }}
