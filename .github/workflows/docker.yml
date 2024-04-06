@@ -46,4 +46,4 @@ jobs:
           tags: |
             ghcr.io/tweedegolf/debian:${{matrix.version}}
             ghcr.io/tweedegolf/debian:${{matrix.alt}}
-            ${{ matrix.latest && 'ghcr.io/tweedegolf/debian:latest' }}
+            ${{ matrix.latest && 'ghcr.io/tweedegolf/debian:latest' || '' }}
