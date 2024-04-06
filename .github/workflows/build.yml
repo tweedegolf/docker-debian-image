@@ -30,25 +30,25 @@ jobs:
 
       - name: Run docker build (latest)
         if: ${{ matrix.latest }}
-        run:
+        run: |
           docker buildx build . \
             --push \
             --platform linux/amd64,linux/arm64 \
             --no-cache \
             --pull \
             --build-arg "DEBIAN_VERSION=${{matrix.version}}" \
-            -t "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
-            -t "ghcr.io/tweedegolf/debian:${{matrix.alt}}" \
-            -t "ghcr.io/tweedegolf/debian:latest"
+            --tag "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
+            --tag "ghcr.io/tweedegolf/debian:${{matrix.alt}}" \
+            --tag "ghcr.io/tweedegolf/debian:latest"
 
       - name: Run docker build
         if: ${{ !matrix.latest }}
-        run:
+        run: |
           docker buildx build . \
             --push \
             --platform linux/amd64,linux/arm64 \
             --no-cache \
             --pull \
             --build-arg "DEBIAN_VERSION=${{matrix.version}}" \
-            -t "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
-            -t "ghcr.io/tweedegolf/debian:${{matrix.alt}}"
+            --tag "ghcr.io/tweedegolf/debian:${{matrix.version}}" \
+            --tag "ghcr.io/tweedegolf/debian:${{matrix.alt}}"
