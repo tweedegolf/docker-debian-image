@@ -50,7 +50,7 @@ jobs:
           pull: true
           build-args: |
             DEBIAN_VERSION=${{matrix.version}}
-          push: ${{ github.ref_name == 'refs/heads/main' }}
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
             ghcr.io/tweedegolf/debian:${{matrix.version}}
             ghcr.io/tweedegolf/debian:${{matrix.alt}}
