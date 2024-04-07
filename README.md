@@ -6,7 +6,6 @@ already set up. Currently the following tags/versions are available:
 - Trixie: `trixie`, `testing`
 - Bookworm: `bookworm`, `stable`, `latest`
 - Bullseye: `bullseye`, `oldstable`
-- Buster: `buster`, `oldoldstable`
 
 Note that the `testing`, `stable`, `latest` and `oldstable` labels may at any
 time change to a newer distribution. If you want to ensure that your images use
@@ -56,13 +55,13 @@ under your local user you suddenly would have root files in between files from
 your local user.
 
 To prevent this from happening, this image can be started with any user/group
-id. Using libnss_wrapper we then dynamically assign a username (`tg` by
+id. Using libnss_wrapper we then dynamically assign a username (`app` by
 default) and groupname to your user inside the container. As an example, see
 this command:
 
     docker run -it --user "$(id -u):$(id -g)" ghcr.io/tweedegolf/debian:stable bash
 
-When you run this command you should see a prompt logged in as the `tg` user.
+When you run this command you should see a prompt logged in as the `app` user.
 This user should have an effective user id and group id that is the same as the
 host system user you started the command from.
 

@@ -31,8 +31,8 @@ ENV TZ Europe/Amsterdam
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV DOCKER 1
 
-ENV DYNAMIC_USER_NAME tg
-ENV DYNAMIC_GROUP_NAME tg
+ENV DYNAMIC_USER_NAME app
+ENV DYNAMIC_GROUP_NAME app
 ENV DYNAMIC_USER_HOME /home/public
 ENV DYNAMIC_USER_SHELL /bin/bash
 ENV ROOT_SWITCH_USER ""
