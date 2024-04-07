@@ -1,0 +1,44 @@
+name: Container Cleanup
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  pull_request:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Remove untagged docker images
+          uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+          with:
+            script: |
+                const versions = await github.rest.packages.getAllPackageVersionsForPackageOwnedByOrg({
+                    package_type: 'container',
+                    package_name: 'debian',
+                    org: context.repo.owner,
+                    per_page: 100,
+                    state: 'active',
+                });
+                const to_remove = [];
+                for (const p of versions.data) {
+                  if ((p.metadata?.container?.tags ?? []).length === 0) {
+                    to_remove.push({
+                      id: p.id,
+                      name: p.name,
+                    });
+                  }
+                }
+                console.log(`Found ${to_remove.length} untagged container images to remove`);
+                for (const r of to_remove) {
+                  await github.rest.packages.deletePackageVersionForOrg({
+                    package_type: 'container',
+                    package_name: 'debian',
+                    org: context.repo.owner,
+                    package_version_id: r.id,
+                  });
+                  console.log(`Deleted untagged container image ${r.name}`);
+                }
+
