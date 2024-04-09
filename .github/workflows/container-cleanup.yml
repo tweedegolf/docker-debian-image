@@ -1,0 +1,19 @@
+name: Container Registry Cleanup
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '15 2 * * MON'
+
+jobs:
+  untagged-cleanup:
+    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-untagged-cleanup.yml@main"
+    secrets: inherit
+    with:
+        package: debian
