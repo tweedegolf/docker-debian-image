@@ -17,7 +17,7 @@ jobs:
           - version: bullseye
             latest: false
             alt: oldstable
-    uses: "./.github/workflows/docker-image.yml"
+    uses: "tweedegolf/actions-container-helpers/container-image.yml@main"
     secrets: inherit
     with:
         push: ${{ github.ref == 'refs/heads/main' }}
