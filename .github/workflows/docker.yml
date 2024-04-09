@@ -18,7 +18,6 @@ jobs:
             latest: false
             alt: oldstable
     uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
-    secrets: inherit
     with:
         push: ${{ github.ref == 'refs/heads/main' }}
         build-args: |

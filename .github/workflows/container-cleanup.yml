@@ -14,6 +14,5 @@ on:
 jobs:
   untagged-cleanup:
     uses: "tweedegolf/actions-container-helpers/.github/workflows/container-untagged-cleanup.yml@main"
-    secrets: inherit
     with:
         package: debian
