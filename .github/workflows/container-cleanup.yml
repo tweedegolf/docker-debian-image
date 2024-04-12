@@ -5,6 +5,7 @@ permissions:
   packages: write
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '15 2 * * MON'
 
