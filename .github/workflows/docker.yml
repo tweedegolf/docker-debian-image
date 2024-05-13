@@ -17,7 +17,7 @@ jobs:
           - version: bullseye
             latest: false
             alt: oldstable
-    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-image.yml@main"
+    uses: "tweedegolf/actions-helpers/.github/workflows/container-image.yml@main"
     with:
         push: ${{ github.ref == 'refs/heads/main' }}
         platforms: "linux/amd64,linux/arm64"

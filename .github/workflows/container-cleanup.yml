@@ -11,6 +11,6 @@ on:
 
 jobs:
   untagged-cleanup:
-    uses: "tweedegolf/actions-container-helpers/.github/workflows/container-untagged-cleanup.yml@main"
+    uses: "tweedegolf/actions-helpers/.github/workflows/container-untagged-cleanup.yml@main"
     with:
         package: debian
