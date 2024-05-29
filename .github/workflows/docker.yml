@@ -17,13 +17,19 @@ jobs:
           - version: bullseye
             latest: false
             alt: oldstable
-    uses: "tweedegolf/actions-helpers/.github/workflows/container-image.yml@main"
-    with:
-        push: ${{ github.ref == 'refs/heads/main' }}
-        platforms: "linux/amd64,linux/arm64"
-        build-args: |
-            DEBIAN_VERSION=${{matrix.version}}
-        tags: |
-            ghcr.io/tweedegolf/debian:${{matrix.version}}
-            ghcr.io/tweedegolf/debian:${{matrix.alt}}
-            ${{ matrix.latest && 'ghcr.io/tweedegolf/debian:latest' || '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+
+      - name: Build the base image
+        uses: tweedegolf/build-container-image@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          push: ${{ github.ref == 'refs/heads/main' }}
+          platforms: "linux/amd64,linux/arm64"
+          build-args: |
+              DEBIAN_VERSION=${{matrix.version}}
+          tags: |
+              ghcr.io/tweedegolf/debian:${{matrix.version}}
+              ghcr.io/tweedegolf/debian:${{matrix.alt}}
+              ${{ matrix.latest && 'ghcr.io/tweedegolf/debian:latest' || '' }}
