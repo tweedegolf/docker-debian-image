@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
 
-      - name: Build the base image
+      - name: Build container image
         uses: tweedegolf/build-container-image@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
