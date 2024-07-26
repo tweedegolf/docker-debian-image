@@ -1,3 +1,5 @@
+
+
 name: Container Registry Cleanup
 
 permissions:
@@ -10,7 +12,7 @@ on:
     - cron: '15 2 * * MON'
 
 jobs:
-  untagged-cleanup:
-    uses: "tweedegolf/actions-helpers/.github/workflows/container-untagged-cleanup.yml@main"
-    with:
+  cleanup:
+    - uses: "tweedegolf/cleanup-untagged-images-action@main"
+      with:
         package: debian
